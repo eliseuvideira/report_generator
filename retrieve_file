@@ -15,4 +15,3 @@ get $REMOTE_FILE
 bye
 _EOF_
 ls -l "$REMOTE_FILE"
-

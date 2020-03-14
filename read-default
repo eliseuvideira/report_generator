@@ -4,4 +4,3 @@
 
 read -e -p "What's your username? " -i $USER
 echo "You answered: '$REPLY'"
-

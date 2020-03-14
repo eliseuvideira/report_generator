@@ -24,4 +24,3 @@ else
   echo "Input value is not an integer." >&2
   exit 1
 fi
-

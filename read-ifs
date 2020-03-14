@@ -20,4 +20,3 @@ else
   echo "No such user '$user_name'" >&2
   exit 1
 fi
-
