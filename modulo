@@ -3,8 +3,7 @@
 # modulo: demonstrate the modulo operator
 
 for (( i = 0; i <= 20; ++i )); do
-  remainder=$((i % 5))
-  if (( remainder == 0 )); then
+  if (( (i % 5) == 0 )); then
     printf "<%d> " "$i"
   else
     printf "%d " "$i"
