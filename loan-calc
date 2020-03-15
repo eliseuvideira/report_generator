@@ -6,7 +6,7 @@ PROGNAME="${0##*/}" # parameter expansion to get basename
 
 usage() {
   cat <<- _EOF_
-					Usage: $PROGNAME PRINCIPAL INTEREST MONTHS
+					Usage: $PROGNAME [PRINCIPAL INTEREST MONTHS | -i]
 
 					Where:
 
@@ -17,20 +17,46 @@ usage() {
 					_EOF_
 }
 
-if (( $# != 3 )); then
+principal=
+interest=
+months=
+
+if (( $# == 1 )); then
+  case "$1" in
+    -i|--interactive)
+      read -p "principal = " principal
+      read -p "interest = " interest
+      read -p "months = " months
+      ;;
+    *)
+      usage
+      exit 1
+  esac
+elif (( $# == 3 )); then
+  principal="$1"
+  interest="$2"
+  months="$3"
+else
   usage
   exit 1
 fi
 
-principal=$1
-interest=$2
-months=$3
+for i in $principal $interest $months; do
+  if [[ ! ($i =~ ^[0-9]*\.?[0-9]+$) ]]; then
+    echo "$PROGNAME: invalid parameter: $i is not a valid floating pointer number"
+    exit 1
+  fi
+done
 
-bc << _EOF_
-  scale = 10
-  i = $interest / 12
-  p = $principal
-  n = $months
-  a = p * ((i * ((1 + i) ^ n)) / (((1 + i) ^ n) - 1))
-  print a, "\n"
-_EOF_
+total=$(
+  bc <<- _EOF_
+					scale = 10
+					i = $interest / 12
+					p = $principal
+					n = $months
+					a = p * ((i * ((1 + i) ^ n)) / (((1 + i) ^ n) - 1))
+					print a
+					_EOF_
+)
+
+printf "%.2f\n" $total
